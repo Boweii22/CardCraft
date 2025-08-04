@@ -4,6 +4,7 @@ import { BusinessCard } from '../types';
 import { BusinessCardPreview } from './BusinessCardPreview';
 import { Button } from './ui/Button';
 import { GlassCard } from './ui/GlassCard';
+import { Card3D } from './ui/Card3D';
 import { Plus, Edit3, Trash2, Download, Share2 } from 'lucide-react';
 import { exportCardAsPNG } from '../utils/exportUtils';
 import { shareCard, canShare, shareCardAsImage } from '../utils/pwaUtils';
@@ -152,12 +153,13 @@ export const Dashboard: React.FC<DashboardProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 * index }}
             >
-              <GlassCard className="p-6 space-y-6">
-                <div className="flex justify-center">
-                  <div className="transform scale-75 origin-center">
-                    <BusinessCardPreview card={card} />
+              <Card3D className="w-full">
+                <GlassCard className="p-6 space-y-6">
+                  <div className="flex justify-center">
+                    <div className="transform scale-75 origin-center">
+                      <BusinessCardPreview card={card} />
+                    </div>
                   </div>
-                </div>
 
                 <div className="space-y-4">
                   <div className="text-center">
@@ -205,6 +207,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                   </div>
                 </div>
               </GlassCard>
+                </Card3D>
             </motion.div>
           ))}
         </div>

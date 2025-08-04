@@ -40,16 +40,37 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <motion.button
       type={type}
-      className={`${baseClasses} ${variants[variant]} ${sizes[size]} ${className} ${
-        disabled || loading ? 'opacity-50 cursor-not-allowed' : ''
-      }`}
+      className={`
+        ${baseClasses} ${variants[variant]} ${sizes[size]} ${className} 
+        ${disabled || loading ? 'opacity-50 cursor-not-allowed' : ''}
+        relative overflow-hidden group
+      `}
       onClick={onClick}
       disabled={disabled || loading}
-      whileHover={!disabled && !loading ? { scale: 1.05 } : {}}
-      whileTap={!disabled && !loading ? { scale: 0.95 } : {}}
+      whileHover={!disabled && !loading ? { 
+        scale: 1.05,
+        y: -2,
+        transition: { type: "spring", stiffness: 400, damping: 10 }
+      } : {}}
+      whileTap={!disabled && !loading ? { 
+        scale: 0.95,
+        y: 0,
+        transition: { type: "spring", stiffness: 400, damping: 10 }
+      } : {}}
     >
-      {loading && <LoadingSpinner size={16} />}
-      {children}
+      {/* Glow effect */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        initial={{ x: '-100%' }}
+        whileHover={{ x: '100%' }}
+        transition={{ duration: 0.6, ease: "easeInOut" }}
+      />
+      
+      {/* Content */}
+      <div className="relative z-10 flex items-center justify-center gap-2">
+        {loading && <LoadingSpinner size={16} />}
+        {children}
+      </div>
     </motion.button>
   );
 };

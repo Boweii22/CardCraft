@@ -35,6 +35,9 @@ function App() {
   useEffect(() => {
     // Install PWA service worker
     installPWA();
+    
+    // Clear onboarding state to ensure onboarding shows for testing
+    localStorage.removeItem('has-seen-onboarding');
   }, []);
 
   const createNewCard = (): BusinessCard => ({
@@ -54,11 +57,10 @@ function App() {
   });
 
   const handleCreateNew = () => {
-    console.log('Creating new card, hasSeenOnboarding:', hasSeenOnboarding);
     const newCard = createNewCard();
     setCurrentCard(newCard);
     
-    // Skip welcome step, start directly with template selection
+    // Always show onboarding for new cards, starting with template selection
     setOnboardingStep('template');
     setAppState('onboarding');
   };

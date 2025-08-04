@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, PanInfo } from 'framer-motion';
 import { BusinessCard } from '../../types';
 import { BusinessCardPreview } from '../BusinessCardPreview';
 import { Button } from '../ui/Button';
@@ -9,12 +9,14 @@ interface TemplateStepProps {
   card: BusinessCard;
   updateCard: (updates: Partial<BusinessCard>) => void;
   onNext: () => void;
+  onSwipe?: (direction: 'left' | 'right') => void;
 }
 
 export const TemplateStep: React.FC<TemplateStepProps> = ({ 
   card, 
   updateCard, 
-  onNext 
+  onNext,
+  onSwipe
 }) => {
   const templates = [
     { id: 'modern', name: 'Modern', description: 'Clean gradient design' },
@@ -27,12 +29,27 @@ export const TemplateStep: React.FC<TemplateStepProps> = ({
     updateCard({ template });
   };
 
+  const handleDragEnd = (event: any, info: PanInfo) => {
+    if (info.offset.x > 100) {
+      // Swipe right - go back
+      onSwipe?.('right');
+    } else if (info.offset.x < -100) {
+      // Swipe left - go next
+      onSwipe?.('left');
+    }
+  };
+
   return (
     <motion.div
       className="space-y-8"
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.2}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 0.95 }}
     >
       <div className="text-center">
         <h2 className="text-3xl font-bold text-white mb-4">Choose Your Style</h2>

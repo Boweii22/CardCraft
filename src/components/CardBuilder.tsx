@@ -8,6 +8,7 @@ import { Input } from './ui/Input';
 import { exportCardAsPNG } from '../utils/exportUtils';
 import { shareCard, canShare, shareCardAsImage } from '../utils/pwaUtils';
 import { ArrowLeft, Download, Share2, Save, Palette, Layout } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 interface CardBuilderProps {
   card: BusinessCard;
@@ -43,6 +44,13 @@ export const CardBuilder: React.FC<CardBuilderProps> = ({
     try {
       // Try to share as image first
       await shareCardAsImage('business-card-preview', editingCard);
+      // Trigger confetti celebration for successful share
+      confetti({
+        particleCount: 50,
+        spread: 50,
+        origin: { y: 0.6 },
+        colors: ['#06b6d4', '#3b82f6', '#8b5cf6']
+      });
     } catch (error) {
       // Fallback to text sharing
       await shareCard(
@@ -50,6 +58,12 @@ export const CardBuilder: React.FC<CardBuilderProps> = ({
         `${editingCard.name || 'My Business Card'}`,
         `Check out my business card created with CardCraft!`,
       );
+      // Still trigger confetti for successful text share
+      confetti({
+        particleCount: 30,
+        spread: 40,
+        origin: { y: 0.6 }
+      });
     }
   };
 
@@ -57,6 +71,12 @@ export const CardBuilder: React.FC<CardBuilderProps> = ({
     setIsSaving(true);
     try {
       onSave(editingCard);
+      // Trigger confetti celebration
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     } finally {
       setIsSaving(false);
     }
